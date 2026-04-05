@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>HypeSquad · Badge Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* animated gradient circles background */
+        .bg-circles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-circles .circle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(45,45,55,0.6) 0%, rgba(25,25,35,0.3) 70%, transparent 100%);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: floatCircle 20s infinite ease-in-out;
+        }
+
+        .bg-circles .circle-1 {
+            width: 500px;
+            height: 500px;
+            top: -150px;
+            left: -150px;
+            animation-delay: 0s;
+        }
+
+        .bg-circles .circle-2 {
+            width: 600px;
+            height: 600px;
+            bottom: -200px;
+            right: -200px;
+            animation-delay: 5s;
+            background: radial-gradient(circle, rgba(60,60,75,0.5) 0%, rgba(30,30,45,0.2) 80%, transparent 100%);
+        }
+
+        .bg-circles .circle-3 {
+            width: 400px;
+            height: 400px;
+            top: 30%;
+            right: 20%;
+            animation-delay: 2s;
+            background: radial-gradient(circle, rgba(80,80,100,0.4) 0%, rgba(40,40,55,0.2) 70%, transparent 100%);
+        }
+
+        .bg-circles .circle-4 {
+            width: 350px;
+            height: 350px;
+            bottom: 10%;
+            left: 10%;
+            animation-delay: 7s;
+        }
+
+        /* square grid overlay */
+        .square-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatCircle {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            50% { transform: translate(30px, 20px) scale(1.08); opacity: 0.9; }
+        }
+
+        .app-card {
+            position: relative;
+            z-index: 2;
+            max-width: 520px;
+            width: 100%;
+            background: rgba(18, 18, 24, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .hdr {
+            padding: 32px 28px 20px 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+        }
+
+        .hdr h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f0f0f0 0%, #a0a0b0 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            margin-bottom: 8px;
+        }
+
+        .hdr .badge-sub {
+            font-size: 13px;
+            color: #8a8a9a;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .hdr .badge-sub span {
+            background: rgba(255,255,255,0.05);
+            padding: 4px 12px;
+            border-radius: 60px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #b0b0c0;
+            letter-spacing: 0.3px;
+        }
+
+        .main-area {
+            padding: 28px 28px 36px 28px;
+        }
+
+        .prf-card {
+            background: rgba(12, 12, 18, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 18px 20px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .prf-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #1e1e28;
+            border: 2px solid #6a6a7a;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .prf-info { flex: 1; }
+        .prf-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; color: #8a8a9a; }
+        .prf-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+        .prf-name h3 { font-size: 18px; font-weight: 600; color: #ececf0; }
+
+        .logout-act {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            width: 38px;
+            height: 38px;
+            border-radius: 40px;
+            cursor: pointer;
+            color: #aaaabc;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logout-act:hover { background: rgba(255,70,70,0.2); color: #ff8a8a; border-color: rgba(255,100,100,0.3); }
+
+        .token-field { margin-bottom: 32px; }
+        .token-label { font-size: 13px; font-weight: 500; color: #b0b0c0; margin-bottom: 10px; display: block; letter-spacing: 0.3px; }
+        .input-group { position: relative; }
+        .token-input {
+            width: 100%;
+            background: rgba(10, 10, 14, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 28px;
+            padding: 14px 48px 14px 20px;
+            font-size: 14px;
+            font-family: 'Inter', monospace;
+            color: #e2e2ea;
+            transition: 0.2s;
+        }
+        .token-input:focus { outline: none; border-color: #8a8aaa; background: #0c0c12; box-shadow: 0 0 0 3px rgba(138,138,170,0.15); }
+        .toggle-vis {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #8a8a9a;
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            border-radius: 30px;
+        }
+        .toggle-vis:hover { color: #ccccdd; }
+
+        .badge-section h4 { font-size: 15px; font-weight: 600; color: #d0d0e0; margin-bottom: 18px; letter-spacing: -0.2px; }
+        .badge-palette { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+        .badge-tile {
+            flex: 1;
+            background: rgba(12, 12, 18, 0.6);
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 32px;
+            padding: 18px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .badge-tile.selected { background: rgba(40, 40, 52, 0.8); border-color: #9a9abb; box-shadow: 0 8px 20px -8px rgba(0,0,0,0.5); transform: scale(0.97); }
+        .badge-icon { width: 60px; height: 60px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
+        .badge-icon img { width: 50px; height: 50px; filter: grayscale(0.7) contrast(0.9); transition: filter 0.2s, transform 0.2s; }
+        .badge-tile.selected .badge-icon img { filter: grayscale(0) contrast(1.1); }
+        .badge-tile:hover .badge-icon img { transform: scale(1.05); filter: grayscale(0.2); }
+        .badge-tile span { font-size: 13px; font-weight: 500; color: #c8c8dc; letter-spacing: 0.3px; }
+
+        .action-row { display: flex; gap: 14px; margin-bottom: 28px; }
+        .prim-btn, .sec-btn {
+            flex: 1;
+            border: none;
+            padding: 12px 0;
+            border-radius: 44px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            letter-spacing: 0.3px;
+        }
+        .prim-btn {
+            background: linear-gradient(135deg, #3a3a4a, #2a2a38);
+            color: #e8e8f0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .prim-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .prim-btn:not(:disabled):hover { background: linear-gradient(135deg, #4a4a5e, #353548); transform: translateY(-1px); }
+        .sec-btn {
+            background: rgba(20, 20, 28, 0.8);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #c0c0d0;
+        }
+        .sec-btn:hover { background: #2a2a38; border-color: rgba(255,255,255,0.15); transform: translateY(-1px); }
+
+        .msg-area {
+            background: rgba(8, 8, 12, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 12px 18px;
+            margin-top: 12px;
+            font-size: 13px;
+            text-align: center;
+            font-weight: 500;
+            border-left: 3px solid #7a7a9a;
+        }
+        .msg-success { color: #aaffcc; border-left-color: #88ffaa; background: rgba(30,40,30,0.5); }
+        .msg-error { color: #ffaaae; border-left-color: #ff7777; background: rgba(50,30,30,0.5); }
+        .msg-info { color: #bcbcdd; border-left-color: #8a8aaa; }
+
+        .loading-spin { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 10px; }
+        .hidden { display: none !important; }
+        .spinner-slim {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #3a3a4a;
+            border-top: 2px solid #aaaacc;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .footer-note {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 11px;
+            color: #6a6a7a;
+            background: rgba(0,0,0,0.3);
+            border-radius: 40px;
+            padding: 10px;
+            letter-spacing: 0.2px;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .app-card { animation: fadeSlide 0.5s ease-out; }
+    </style>
+</head>
+<body>
+<div class="bg-circles">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+    <div class="circle circle-4"></div>
+</div>
+<div class="square-grid"></div>
+
+<div class="app-card">
+    <div class="hdr">
+        <h1>HypeSquad Manager</h1>
+        <div class="badge-sub">
+            <span>kidnap.lol</span>
+        </div>
+    </div>
+    <div class="main-area">
+        <div id="prfPanel" class="prf-card hidden">
+            <img id="usrAvatar" class="prf-avatar" src="" alt="avatar">
+            <div class="prf-info">
+                <div class="prf-label">CONNECTED AS</div>
+                <div class="prf-name"><h3 id="usrName">User</h3></div>
+            </div>
+            <button id="lgOutBtn" class="logout-act" title="disconnect">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+            </button>
+        </div>
+
+        <div id="loginContainer">
+            <div class="token-field">
+                <label class="token-label">● Discord access token</label>
+                <div class="input-group">
+                    <input type="password" id="tokenInp" class="token-input" placeholder="mfa.xxxx...  •  token" autocomplete="off">
+                    <button id="toggleTokenBtn" class="toggle-vis" type="button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="badge-section">
+            <h4>select house</h4>
+            <div class="badge-palette" id="badgeContainer">
+                <div class="badge-tile" data-house="2">
+                    <div class="badge-icon"><img src="bravery.svg" alt="bravery" onerror="this.src='https://cdn.jsdelivr.net/npm/@iconify-icons/ph/shield-star-fill.svg';this.style.filter='grayscale(0.7) brightness(0.9)'"></div>
+                    <span>BRAVERY</span>
+                </div>
+                <div class="badge-tile" data-house="3">
+                    <div class="badge-icon"><img src="brilliance.svg" alt="brilliance" onerror="this.src='https://cdn.jsdelivr.net/npm/@iconify-icons/ph/sparkle-fill.svg';this.style.filter='grayscale(0.7) brightness(0.9)'"></div>
+                    <span>BRILLIANCE</span>
+                </div>
+                <div class="badge-tile" data-house="1">
+                    <div class="badge-icon"><img src="balance.svg" alt="balance" onerror="this.src='https://cdn.jsdelivr.net/npm/@iconify-icons/ph/balance-scale-fill.svg';this.style.filter='grayscale(0.7) brightness(0.9)'"></div>
+                    <span>BALANCE</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button id="addBadgeBtn" class="prim-btn" disabled>assign badge</button>
+            <button id="delBadgeBtn" class="sec-btn">remove badge</button>
+        </div>
+
+        <div id="statusMsg" class="msg-area msg-info">⸻ ready · paste token & select house</div>
+        <div id="loadingArea" class="loading-spin hidden">
+            <div class="spinner-slim"></div>
+            <span style="color:#aaaacc;">processing...</span>
+        </div>
+        <div class="footer-note">
+            ⚠️ token stays local · never shared
+        </div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        const tokenInp = document.getElementById('tokenInp');
+        const toggleToken = document.getElementById('toggleTokenBtn');
+        const badgeTiles = document.querySelectorAll('.badge-tile');
+        const addBtn = document.getElementById('addBadgeBtn');
+        const removeBtn = document.getElementById('delBadgeBtn');
+        const statusDiv = document.getElementById('statusMsg');
+        const loadingDiv = document.getElementById('loadingArea');
+        const loginContainer = document.getElementById('loginContainer');
+        const prfPanel = document.getElementById('prfPanel');
+        const usrAvatar = document.getElementById('usrAvatar');
+        const usrName = document.getElementById('usrName');
+        const logoutBtn = document.getElementById('lgOutBtn');
+
+        let activeToken = null;
+        let selectedHouse = null;
+        let currentUser = null;
+
+        function showStatus(msg, type = 'info') {
+            statusDiv.textContent = msg;
+            statusDiv.className = `msg-area msg-${type}`;
+            setTimeout(() => {
+                if (statusDiv.textContent === msg) {
+                    statusDiv.className = 'msg-area msg-info';
+                    statusDiv.textContent = '⸻ ready · paste token & select house';
+                }
+            }, 4800);
+        }
+
+        function setLoading(state) {
+            if (state) {
+                loadingDiv.classList.remove('hidden');
+                addBtn.disabled = true;
+                removeBtn.disabled = true;
+            } else {
+                loadingDiv.classList.add('hidden');
+                updateAddBtnState();
+                removeBtn.disabled = false;
+            }
+        }
+
+        function updateAddBtnState() {
+            addBtn.disabled = !(activeToken && selectedHouse);
+        }
+
+        function sanitizeToken(raw) {
+            if (!raw) return '';
+            let tk = String(raw).trim();
+            if ((tk.startsWith('"') && tk.endsWith('"')) || (tk.startsWith("'") && tk.endsWith("'"))) {
+                tk = tk.slice(1, -1).trim();
+            }
+            return tk;
+        }
+
+        async function fetchProfile(token) {
+            if (!token) return false;
+            try {
+                const resp = await fetch('https://discord.com/api/v9/users/@me', {
+                    headers: { 'Authorization': token }
+                });
+                if (resp.ok) {
+                    const user = await resp.json();
+                    currentUser = user;
+                    return true;
+                }
+                return false;
+            } catch (err) {
+                return false;
+            }
+        }
+
+        async function refreshUIAfterToken(token) {
+            const isValid = await fetchProfile(token);
+            if (!isValid) {
+                showStatus('token invalid or expired · please re-enter', 'error');
+                activeToken = null;
+                localStorage.removeItem('dh_token');
+                tokenInp.value = '';
+                loginContainer.classList.remove('hidden');
+                prfPanel.classList.add('hidden');
+                updateAddBtnState();
+                return false;
+            }
+            activeToken = token;
+            localStorage.setItem('dh_token', token);
+            if (currentUser) {
+                const avatarUrl = currentUser.avatar
+                    ? `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png?size=80`
+                    : `https://cdn.discordapp.com/embed/avatars/${parseInt(currentUser.discriminator || '0') % 5}.png`;
+                usrAvatar.src = avatarUrl;
+                const nameContainer = document.querySelector('#usrName');
+                nameContainer.innerHTML = '';
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = currentUser.username;
+                nameContainer.appendChild(nameSpan);
+                const flags = currentUser.flags || currentUser.public_flags || 0;
+                let badgeSvg = '';
+                if (flags & 64) badgeSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#9b8aaf"><path d="M12 2L15 8.5L22 9.5L17 14L18.5 21L12 17.5L5.5 21L7 14L2 9.5L9 8.5L12 2Z"/></svg>`;
+                else if (flags & 128) badgeSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#c0a07a"><path d="M12 2L15 9L22 9L16.5 13.5L18.5 20.5L12 16L5.5 20.5L7.5 13.5L2 9L9 9L12 2Z"/></svg>`;
+                else if (flags & 256) badgeSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#8ab89a"><path d="M12 2L13.5 8.5L20 9L15 13L16.5 19.5L12 15.5L7.5 19.5L9 13L4 9L10.5 8.5L12 2Z"/></svg>`;
+                if (badgeSvg) {
+                    const badgeSpan = document.createElement('span');
+                    badgeSpan.innerHTML = badgeSvg;
+                    badgeSpan.style.display = 'inline-flex';
+                    badgeSpan.style.marginLeft = '6px';
+                    nameContainer.appendChild(badgeSpan);
+                }
+            }
+            loginContainer.classList.add('hidden');
+            prfPanel.classList.remove('hidden');
+            updateAddBtnState();
+            showStatus(`welcome ${currentUser?.username || 'member'}`, 'success');
+            return true;
+        }
+
+        async function logoutFlow() {
+            activeToken = null;
+            selectedHouse = null;
+            localStorage.removeItem('dh_token');
+            tokenInp.value = '';
+            loginContainer.classList.remove('hidden');
+            prfPanel.classList.add('hidden');
+            document.querySelectorAll('.badge-tile').forEach(t => t.classList.remove('selected'));
+            selectedHouse = null;
+            updateAddBtnState();
+            showStatus('disconnected · token cleared', 'info');
+            if (window.electronAPI && window.electronAPI.logout) {
+                await window.electronAPI.logout();
+            }
+        }
+
+        async function applyBadge() {
+            if (!activeToken || !selectedHouse) {
+                showStatus('missing token or house selection', 'error');
+                return;
+            }
+            setLoading(true);
+            try {
+                const houseMap = { 1: 3, 2: 1, 3: 2 };
+                const payloadHouse = houseMap[selectedHouse] || selectedHouse;
+                const resp = await fetch('https://discord.com/api/v9/hypesquad/online', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': activeToken,
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    },
+                    body: JSON.stringify({ house_id: payloadHouse })
+                });
+                if (resp.ok) {
+                    const houseName = getHouseName(selectedHouse);
+                    showStatus(`${houseName} badge applied successfully`, 'success');
+                    await refreshUIAfterToken(activeToken);
+                } else if (resp.status === 401) {
+                    showStatus('token invalid · please login again', 'error');
+                    logoutFlow();
+                } else if (resp.status === 429) {
+                    const data = await resp.json().catch(()=>({}));
+                    const wait = data.retry_after ? Math.ceil(data.retry_after) : 5;
+                    showStatus(`rate limited · wait ${wait}s`, 'error');
+                } else {
+                    const errData = await resp.json().catch(()=>({message:'unknown error'}));
+                    showStatus(`failed: ${errData.message || 'discord api error'}`, 'error');
+                }
+            } catch (err) {
+                showStatus('network error · check connection', 'error');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        async function removeCurrentBadge() {
+            if (!activeToken) {
+                showStatus('token required', 'error');
+                return;
+            }
+            setLoading(true);
+            try {
+                const resp = await fetch('https://discord.com/api/v9/hypesquad/online', {
+                    method: 'DELETE',
+                    headers: { 'Authorization': activeToken, 'User-Agent': 'Mozilla/5.0' }
+                });
+                if (resp.ok || resp.status === 204) {
+                    showStatus('badge removed successfully', 'success');
+                    await refreshUIAfterToken(activeToken);
+                    document.querySelectorAll('.badge-tile').forEach(t => t.classList.remove('selected'));
+                    selectedHouse = null;
+                    updateAddBtnState();
+                } else if (resp.status === 401) {
+                    showStatus('session expired · login again', 'error');
+                    logoutFlow();
+                } else {
+                    showStatus(`remove error: ${resp.status}`, 'error');
+                }
+            } catch (e) {
+                showStatus('request failed', 'error');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function getHouseName(id) {
+            const map = { 1: 'Balance', 2: 'Bravery', 3: 'Brilliance' };
+            return map[id] || 'HypeSquad';
+        }
+
+        badgeTiles.forEach(tile => {
+            tile.addEventListener('click', () => {
+                const houseVal = parseInt(tile.dataset.house);
+                if (isNaN(houseVal)) return;
+                badgeTiles.forEach(t => t.classList.remove('selected'));
+                tile.classList.add('selected');
+                selectedHouse = houseVal;
+                updateAddBtnState();
+            });
+        });
+
+        tokenInp.addEventListener('input', async (e) => {
+            const raw = e.target.value;
+            const clean = sanitizeToken(raw);
+            if (clean && clean !== activeToken) {
+                setLoading(true);
+                const success = await refreshUIAfterToken(clean);
+                setLoading(false);
+                if (!success && clean) {
+                    if (activeToken === null) showStatus('token verification failed', 'error');
+                }
+            } else if (!clean && activeToken) {
+                logoutFlow();
+            }
+        });
+
+        toggleToken.addEventListener('click', () => {
+            const isPass = tokenInp.type === 'password';
+            tokenInp.type = isPass ? 'text' : 'password';
+        });
+
+        addBtn.addEventListener('click', applyBadge);
+        removeBtn.addEventListener('click', removeCurrentBadge);
+        logoutBtn.addEventListener('click', logoutFlow);
+
+        (async function initSession() {
+            const saved = localStorage.getItem('dh_token');
+            if (saved && saved.length > 20) {
+                tokenInp.value = saved;
+                setLoading(true);
+                const ok = await refreshUIAfterToken(saved);
+                setLoading(false);
+                if (!ok) {
+                    localStorage.removeItem('dh_token');
+                    tokenInp.value = '';
+                }
+            } else {
+                loginContainer.classList.remove('hidden');
+                prfPanel.classList.add('hidden');
+                updateAddBtnState();
+            }
+            if (window.electronAPI && window.electronAPI.loginWithDiscord) {
+                console.log('electron bridge detected');
+            }
+        })();
+
+        updateAddBtnState();
+    })();
+</script>
+</body>
+</html>
